@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
 
-function App() {
+import Title from "./components/Title/Title";
+import Table from "./components/Table/Table";
+import Button from "./components/Button/Button";
+
+const App = () => {
+  const [data, setData] = useState(null);
+
+  const [selectedRows, setSelectedRows] = useState([]);
+
+  useEffect(() => {
+    const url = "https://api.npoint.io/324f4ca2cdd639760638";
+    fetch(url)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setData(data);
+      });
+  }, []);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Title title="Таблица пользователей" />
+      <Table data={data} setData={setData} />
+      <Button
+        title="Удалить выбранные"
+        disabled={selectedRows.length > 0 ? false : true}
+      />
     </div>
   );
-}
+};
 
 export default App;

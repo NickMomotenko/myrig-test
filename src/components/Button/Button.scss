@@ -1,0 +1,48 @@
+.button {
+  border-radius: 6px;
+  background-color: #0085be;
+  padding: 15px 35px;
+  transition: 0.4s;
+
+  span {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  &:hover {
+    background-color: #02597e;
+  }
+
+  &:active {
+    background-color: #002abe;
+  }
+
+  &:disabled {
+    border-color: #dadada;
+    background-color: #ffffff;
+    
+    span {
+      color: #dadada;
+    }
+  }
+
+  &--img {
+    background-color: transparent;
+    padding: 5px;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    &:active {
+      background-color: transparent;
+    }
+
+    svg {
+      height: 20px;
+      width: 20px;
+      display: inline-block;
+    }
+  }
+}
