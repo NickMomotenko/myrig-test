@@ -20,11 +20,10 @@ const App = () => {
       });
   }, []);
 
-
   return (
     <div className="app">
       <Title title="Таблица пользователей" />
-      <Table data={data} setData={setData} />
+      <Table data={data} setData={setData} setSelectedRows={setSelectedRows} />
       <Button
         title="Удалить выбранные"
         disabled={selectedRows.length > 0 ? false : true}

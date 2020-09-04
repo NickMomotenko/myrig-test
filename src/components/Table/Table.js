@@ -41,8 +41,10 @@ const TableRow = (props) => {
   const [activeRow, setActiveRow] = useState(false);
 
   const deleteRow = (id) => {
-    // props.setData(props.data.filter(() => props.id != id));
+    props.setCustomData(props.customData.filter((row) => row.id != id));
   };
+
+  const selectRow = (id) => {};
 
   return (
     <div className="table__row table-row">
@@ -51,12 +53,12 @@ const TableRow = (props) => {
           <input
             type="radio"
             className="table-row__radio"
-            checked={activeRow}
+            checked={props.selected}
             onChange={() => {}}
           />
           <div
             className="table-row__radio-custom"
-            onClick={() => setActiveRow(!activeRow)}
+            onClick={() => selectRow(props.id)}
           />
         </div>
       </div>
@@ -75,6 +77,24 @@ const TableRow = (props) => {
 };
 
 const Table = (props) => {
+  const [customData, setCustomData] = useState(null);
+
+  useEffect(() => {
+    const data =
+      props.data &&
+      props.data.map((item) => ({
+        ...item,
+        id: generateRowId(),
+        customWeight: generateRowWeight(item.weight),
+        customHeight: generateRowHeight(item.height),
+        customeSalary: convertSalary(item.salary),
+        customeAge: convertUNIXtoAge(item.date_of_birth),
+        selected: false,
+      }));
+
+    setCustomData(data);
+  },[props.data]);
+
   const generateRowId = () => {
     return "_" + Math.random().toString(36).substr(2, 9);
   };
@@ -156,21 +176,16 @@ const Table = (props) => {
   return (
     <div className="table">
       <TableHeader />
-      {props.data
-        ? props.data.map((item, index) => (
-            <TableRow
-              key={index}
-              index={++index}
-              id={generateRowId()}
-              customWeight={generateRowWeight(item.weight)}
-              customHeight={generateRowHeight(item.height)}
-              customeSalary={convertSalary(item.salary)}
-              customeAge={convertUNIXtoAge(item.date_of_birth)}
-              {...props}
-              {...item}
-            />
-          ))
-        : console.log("data not found")}
+      {customData &&
+        customData.map((item, index) => (
+          <TableRow
+            key={item.id}
+            index={index}
+            customData={customData}
+            setCustomData={setCustomData}
+            {...item}
+          />
+        ))}
     </div>
   );
 };
