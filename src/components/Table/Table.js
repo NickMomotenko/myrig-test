@@ -19,15 +19,19 @@ const TableHeader = (props) => {
 
   const selectAllRows = () => {
     const arr = props.customData.map((row) => {
-      if (row.selected) {
-        return { ...row, selected: false };
-      } else {
-        return { ...row, selected: true };
-      }
+      return row.selected
+        ? { ...row, selected: false }
+        : { ...row, selected: true };
     });
-
     props.setSelectedRows(arr);
     props.setCustomData(arr);
+  };
+
+  const checkRadioStatus = () => {
+    if (activeRadio) {
+      setActiveRadio(false);
+      props.setSelectedRows([]);
+    } else setActiveRadio(true);
   };
 
   return (
@@ -45,7 +49,7 @@ const TableHeader = (props) => {
               className="table-row__radio-custom"
               onClick={() => {
                 selectAllRows();
-                setActiveRadio(!activeRadio);
+                checkRadioStatus();
               }}
             />
           </div>
