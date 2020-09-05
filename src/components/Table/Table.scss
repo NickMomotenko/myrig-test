@@ -13,7 +13,9 @@
   }
 
   &__header {
-    display: flex;
+    .table__row {
+      display: flex;
+    }
   }
 
   &-row {
@@ -50,5 +52,10 @@
         }
       }
     }
+  }
+
+  &__controlls {
+    display: flex;
+    justify-content: flex-end;
   }
 }

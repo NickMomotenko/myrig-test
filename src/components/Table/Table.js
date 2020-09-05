@@ -4,7 +4,7 @@ import Button from "../Button/Button";
 
 import "./Table.scss";
 
-const TableHeader = () => {
+const TableHeader = (props) => {
   const [header, setHeader] = useState([
     "№",
     "ФИО",
@@ -15,36 +15,75 @@ const TableHeader = () => {
     "Управление",
   ]);
 
+  const [activeRadio, setActiveRadio] = useState(false);
+
+  const selectAllRows = () => {
+    const arr = props.customData.map((row) => {
+      if (row.selected) {
+        return { ...row, selected: false };
+      } else {
+        return { ...row, selected: true };
+      }
+    });
+
+    props.setSelectedRows(arr);
+    props.setCustomData(arr);
+  };
+
   return (
     <div className="table__header">
-      <div className="table__col">
-        <div className="table-row__checker">
-          <input
-            type="radio"
-            className="table-row__radio"
-            //   checked={activeRow}
-            onChange={() => {}}
-          />
-          <div className="table-row__radio-custom" onClick={() => {}} />
+      <div className="table__row">
+        <div className="table__col">
+          <div className="table-row__checker">
+            <input
+              type="radio"
+              className="table-row__radio"
+              checked={activeRadio}
+              onChange={() => {}}
+            />
+            <div
+              className="table-row__radio-custom"
+              onClick={() => {
+                selectAllRows();
+                setActiveRadio(!activeRadio);
+              }}
+            />
+          </div>
         </div>
+        {header.map((item, index) => (
+          <div className="table__col" key={index}>
+            <div className="table__header-title">{item}</div>
+          </div>
+        ))}
       </div>
-      {header.map((item, index) => (
-        <div className="table__col" key={index}>
-          <div className="table__header-title">{item}</div>
-        </div>
-      ))}
     </div>
   );
 };
 
 const TableRow = (props) => {
-  const [activeRow, setActiveRow] = useState(false);
+  const selectRow = (id) => {
+    const arr = props.customData.map((row) => {
+      if (row.id == id) {
+        if (row.selected) {
+          row.selected = false;
+          props.setSelectedRows(
+            props.selectedRows.filter((selRow) => selRow.id != id)
+          );
+        } else {
+          row.selected = true;
+          props.setSelectedRows([...props.selectedRows, { ...row }]);
+        }
+      }
+
+      return row;
+    });
+
+    props.setCustomData(arr);
+  };
 
   const deleteRow = (id) => {
     props.setCustomData(props.customData.filter((row) => row.id != id));
   };
-
-  const selectRow = (id) => {};
 
   return (
     <div className="table__row table-row">
@@ -69,8 +108,8 @@ const TableRow = (props) => {
       <div className="table__col">{`${props.customWeight} кг`}</div>
       <div className="table__col">{`$ ${props.customeSalary}`}</div>
       <div className="table__col table-row__buttons">
-        <Button img="pencil" />
-        <Button img="basket" onClick={() => deleteRow(props.id)} />
+        <Button img spriteID="#pencil" onClick={() => {}} />
+        <Button img spriteID="#basket" onClick={() => deleteRow(props.id)} />
       </div>
     </div>
   );
@@ -78,6 +117,7 @@ const TableRow = (props) => {
 
 const Table = (props) => {
   const [customData, setCustomData] = useState(null);
+  const [moneyDataUSD, setMoneyDataUSD] = useState(null);
 
   useEffect(() => {
     const data =
@@ -93,7 +133,18 @@ const Table = (props) => {
       }));
 
     setCustomData(data);
-  },[props.data]);
+  }, [props.data]);
+
+  useEffect(() => {
+    const url = "https://api.exchangeratesapi.io/latest";
+    fetch(url)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setMoneyDataUSD(data.rates.USD);
+      });
+  }, []);
 
   const generateRowId = () => {
     return "_" + Math.random().toString(36).substr(2, 9);
@@ -123,7 +174,7 @@ const Table = (props) => {
   };
 
   const convertSalary = (salary) => {
-    return Math.round(salary * 1.182);
+    return Math.round(salary * moneyDataUSD);
   };
 
   const convertUNIXtoAge = (unix) => {
@@ -173,19 +224,45 @@ const Table = (props) => {
     // }
   };
 
+  const deleteSelectedRows = () => {
+    let arr = [];
+
+    customData.map((row) => {
+      if (!row.selected) {
+        arr.push(row);
+      }
+
+      return row;
+    });
+    setCustomData(arr);
+    props.setSelectedRows([]);
+  };
+
   return (
     <div className="table">
-      <TableHeader />
+      <TableHeader
+        customData={customData}
+        setCustomData={setCustomData}
+        setSelectedRows={props.setSelectedRows}
+      />
       {customData &&
         customData.map((item, index) => (
           <TableRow
             key={item.id}
-            index={index}
+            index={++index}
             customData={customData}
             setCustomData={setCustomData}
+            {...props}
             {...item}
           />
         ))}
+      <div className="table__controlls">
+        <Button
+          title="Удалить выбранные"
+          disabled={props.selectedRows.length > 0 ? false : true}
+          onClick={deleteSelectedRows}
+        />
+      </div>
     </div>
   );
 };

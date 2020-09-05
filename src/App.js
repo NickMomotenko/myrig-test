@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 
 import Title from "./components/Title/Title";
 import Table from "./components/Table/Table";
-import Button from "./components/Button/Button";
 
 const App = () => {
   const [data, setData] = useState(null);
@@ -23,10 +22,11 @@ const App = () => {
   return (
     <div className="app">
       <Title title="Таблица пользователей" />
-      <Table data={data} setData={setData} setSelectedRows={setSelectedRows} />
-      <Button
-        title="Удалить выбранные"
-        disabled={selectedRows.length > 0 ? false : true}
+      <Table
+        data={data}
+        setData={setData}
+        selectedRows={selectedRows}
+        setSelectedRows={setSelectedRows}
       />
     </div>
   );
