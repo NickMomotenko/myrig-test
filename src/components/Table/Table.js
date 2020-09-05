@@ -166,6 +166,8 @@ const Table = (props) => {
     const metres = resultInMeters.substr(0, 1);
     const sm = resultInMeters.substr(1, 3);
 
+    console.log(height);
+
     return `${metres} м ${sm} см`;
   };
 
@@ -178,50 +180,23 @@ const Table = (props) => {
   };
 
   const convertUNIXtoAge = (unix) => {
+    let age = 0;
     let userUNIX = new Date(unix * 1000);
+    let date = `${userUNIX.getFullYear()}-${
+      userUNIX.getMonth() + 1
+    }-${userUNIX.getDate()}`;
 
-    let userYear = userUNIX.getFullYear();
-    let userMonth = userUNIX.getUTCMonth() + 1;
-    let userDay = userUNIX.getDate();
+    age = get_current_age(date);
 
-    let dateNow = new Date();
-
-    let userBT = new Date(userYear, userMonth, userDay); //Дата рождения
-
-    let today = new Date(
-      dateNow.getFullYear(),
-      dateNow.getMonth(),
-      dateNow.getDate()
-    );
-
-    let btInCurrentYear = new Date(
-      today.getFullYear(),
-      userBT.getMonth(),
-      userBT.getDate()
-    );
-
-    let age;
-
-    age = today.getFullYear() - userBT.getFullYear();
-
-    if (today < userBT) {
-      age = age - 1;
+    function get_current_age(date) {
+      return (
+        ((new Date().getTime() - new Date(date)) /
+          (24 * 3600 * 365.25 * 1000)) |
+        0
+      );
     }
 
-    return age;
-
-    // var now = new Date(); //Текущя дата
-    // var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); //Текущя дата без времени
-    // var dob = new Date(1997, 10, 24); //Дата рождения
-    // var dobnow = new Date(today.getFullYear(), dob.getMonth(), dob.getDate()); //ДР в текущем году
-    // var age; //Возраст
-
-    // //Возраст = текущий год - год рождения
-    // age = today.getFullYear() - dob.getFullYear();
-    // //Если ДР в этом году ещё предстоит, то вычитаем из age один год
-    // if (today < dobnow) {
-    //   age = age - 1;
-    // }
+    return `${age}`;
   };
 
   const deleteSelectedRows = () => {
