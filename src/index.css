@@ -21,3 +21,7 @@ button {
   cursor: pointer;
   border: 1px solid transparent;
 }
+
+.app{
+  margin: 20px;
+}

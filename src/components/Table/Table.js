@@ -4,6 +4,10 @@ import Button from "../Button/Button";
 
 import "./Table.scss";
 
+const TableCol = ({ children }) => {
+  return <div className="table__col">{children}</div>;
+};
+
 const TableHeader = (props) => {
   const [header, setHeader] = useState([
     "№",
@@ -91,7 +95,7 @@ const TableRow = (props) => {
 
   return (
     <div className="table__row table-row">
-      <div className="table__col">
+      <TableCol>
         <div className="table-row__checker">
           <input
             type="radio"
@@ -104,13 +108,13 @@ const TableRow = (props) => {
             onClick={() => selectRow(props.id)}
           />
         </div>
-      </div>
-      <div className="table__col">{props.index}</div>
-      <div className="table__col">{`${props.first_name} ${props.last_name}`}</div>
-      <div className="table__col">{props.customeAge}</div>
-      <div className="table__col">{`${props.customHeight}`}</div>
-      <div className="table__col">{`${props.customWeight} кг`}</div>
-      <div className="table__col">{`$ ${props.customeSalary}`}</div>
+      </TableCol>
+      <TableCol>{props.index}</TableCol>
+      <TableCol>{`${props.first_name} ${props.last_name}`}</TableCol>
+      <TableCol>{props.customeAge}</TableCol>
+      <TableCol>{`${props.customHeight}`}</TableCol>
+      <TableCol>{`${props.customWeight} кг`}</TableCol>
+      <TableCol>{`$ ${props.customeSalary}`}</TableCol>
       <div className="table__col table-row__buttons">
         <Button img spriteID="#pencil" onClick={() => {}} />
         <Button img spriteID="#basket" onClick={() => deleteRow(props.id)} />

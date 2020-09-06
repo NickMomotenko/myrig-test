@@ -1,10 +1,14 @@
 .table {
+  border-radius: 6px;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+  border: solid 1px #f5f5f5;
+
   &__row {
     padding: 12px 26px 12px 20px;
-    background-color: #fff;
+    background-color: #fafafa;
 
     &:nth-child(2n) {
-      background-color: #fafafa;
+      background-color: #fff;
     }
   }
 
@@ -13,8 +17,10 @@
   }
 
   &__header {
+    background-color: #f0f0f0;
     .table__row {
       display: flex;
+      background-color: transparent;
     }
   }
 
@@ -57,5 +63,6 @@
   &__controlls {
     display: flex;
     justify-content: flex-end;
+    margin-top: 25px;
   }
 }
