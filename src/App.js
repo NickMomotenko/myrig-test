@@ -6,8 +6,6 @@ import Table from "./components/Table/Table";
 const App = () => {
   const [data, setData] = useState(null);
 
-  const [selectedRows, setSelectedRows] = useState([]);
-
   useEffect(() => {
     const url = "https://api.npoint.io/324f4ca2cdd639760638";
     fetch(url)
@@ -22,12 +20,7 @@ const App = () => {
   return (
     <div className="app">
       <Title title="Таблица пользователей" />
-      <Table
-        data={data}
-        setData={setData}
-        selectedRows={selectedRows}
-        setSelectedRows={setSelectedRows}
-      />
+      <Table data={data} setData={setData} />
     </div>
   );
 };
